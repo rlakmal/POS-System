@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
 @Entity
 @Table(name = "item")
 @AllArgsConstructor
@@ -33,4 +36,7 @@ public class Item {
 
     @Column(name = "active_state",columnDefinition = "TINYINT default 1")
     private boolean activeState;
+
+    @OneToMany(mappedBy = "items")
+    private Set<OrderDetail> orderDetail;
 }

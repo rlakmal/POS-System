@@ -1,5 +1,8 @@
 package com.springbootacedamyfirst.pointofproject.entity;
 import jakarta.persistence.*;
+
+import java.util.Set;
+
 @Entity
 @Table(name = "customer")
 
@@ -20,6 +23,9 @@ public class Customer {
     private String nic;
     @Column(name = "active_state",columnDefinition = "TINYINT default 1")
     private boolean activeState;
+
+    @OneToMany(mappedBy="customer")
+    private Set<Order> orderSet;
 
     public Customer() {
     }

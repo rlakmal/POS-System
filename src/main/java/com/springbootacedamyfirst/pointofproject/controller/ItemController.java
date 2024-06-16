@@ -1,9 +1,15 @@
 package com.springbootacedamyfirst.pointofproject.controller;
 
 import com.springbootacedamyfirst.pointofproject.dto.ItemDTO;
+import com.springbootacedamyfirst.pointofproject.dto.paginated.PaginatedResponseItemDTO;
 import com.springbootacedamyfirst.pointofproject.dto.request.RequestSaveItemDTO;
 import com.springbootacedamyfirst.pointofproject.service.ItemService;
+import com.springbootacedamyfirst.pointofproject.util.StandardResponse;
+import jakarta.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,12 +37,28 @@ public class ItemController {
 
     }
     @GetMapping(path = {"/get-all-items"})
-    public List<ItemDTO> getAllItems(){
+    public ResponseEntity<StandardResponse> getAllItems(){
         List<ItemDTO>itemDTOS = itemService.getAllItems();
-        return itemDTOS;
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,"Success",itemDTOS), HttpStatus.OK
+        );
     }
 
 
+    @GetMapping(
+            path = {"/get-all-items-active"},
+            params = {"page","size","activeState"}
+    )
+    public ResponseEntity<StandardResponse> getAllItemsActive(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") @Max(50) int size,
+            @RequestParam(value = "activeState") boolean activeState
+    ){
+        PaginatedResponseItemDTO paginatedResponseItemDTO  = itemService.getAllItemsActive(page,size,activeState);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,"Success",paginatedResponseItemDTO), HttpStatus.OK
+        );
+    }
 
 
 
